@@ -17,7 +17,7 @@ local function create_window(width, height)
     local bufnr = vim.api.nvim_create_buf(false, false)
 
     local win_id, win = popup.create(bufnr, {
-        title = "Recall your mom dad - recent buffers",
+        title = "Recall",
         highlight = "RecallWindow",
         line = math.floor(((vim.o.lines - height) / 2) - 1),
         col = math.floor((vim.o.columns - width) / 2),
@@ -40,9 +40,21 @@ end
 -- Given a history data, construct the lines which we will display in the popup buffer
 local function create_content(history_data)
     local contents = {}
+
     for i, x in ipairs(List.reverse(history_data).data) do
+        local nav = i - 1
+        local nav_string = tostring(nav)
+
+        if nav == 0 then
+            nav_string = "*"
+        end
+
+        if nav > 9 then
+            nav_string = " "
+        end
+
         local path = get_relative_path(x.path)
-        contents[#contents + 1] = string.format("%s %s", i, path)
+        contents[#contents + 1] = string.format("%s %s", nav_string, path)
     end
     return contents
 end

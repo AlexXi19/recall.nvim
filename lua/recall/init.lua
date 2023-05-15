@@ -73,6 +73,17 @@ function M.toggle()
         ":lua require('recall').open_selected()<CR>",
         { silent = true }
     )
+
+    local max_nav = math.min(vim.g.recall_history, #HistoryData.data, 9)
+    for i = 1, max_nav do
+        vim.api.nvim_buf_set_keymap(
+            popup_info.buffer,
+            "n",
+            tostring(i),
+            string.format(":lua require('recall').navigate_with_input(%d)<CR>", i),
+            { silent = true }
+        )
+    end
 end
 
 -- Record file path, line number and char position, then write to a file and save the file
@@ -92,13 +103,21 @@ function M.store_position()
     end
 end
 
--- Open the selected (rfom popup buffer) file in a new buffer at the defined line number
-function M.open_selected()
-    local line_number, _ = unpack(vim.api.nvim_win_get_cursor(0))
-    local selected_item = HistoryData.data[line_number]
+local function navigate(number)
+    local selected_item = HistoryData.data[number]
     Ui.close_popup()
     vim.api.nvim_command(string.format("e %s", selected_item.path))
     vim.api.nvim_command(string.format(":%d", selected_item.line_number))
+end
+
+function M.navigate_with_input(number)
+    navigate(number + 1)
+end
+
+-- Open the selected (rfom popup buffer) file in a new buffer at the defined line number
+function M.open_selected()
+    local line_number, _ = unpack(vim.api.nvim_win_get_cursor(0))
+    navigate(line_number)
 end
 
 -- Save history to the defined cache file
@@ -110,17 +129,11 @@ end
 -- Load history from the defined cached file
 function M.load()
     local cache_path = get_cache_path()
-    print(cache_path)
     if cache_path:exists() ~= true then
         -- If the cache file does not exists, let's create it with the empty data holder
         M.save()
     end
     List.from_json(HistoryData, cache_path:read())
-
-    -- print history data prettily 
-    print(vim.inspect(HistoryData))
-
-
 end
 
 -- Remove all items from the history (clear the cache file as well)
@@ -146,7 +159,7 @@ function M.setup(opts)
 
     set_default("history", 20)
     set_default("shorten_path", true)
-    set_default("window_width", 80)
+    set_default("window_width", 70)
     set_default("window_height", 14)
 end
 
