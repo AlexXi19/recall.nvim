@@ -1,25 +1,20 @@
-# Recall.nvim
+# recall.nvim
 
 A NeoVim plugin which remembers where you've been
 
-![Recall](art/recall.png)
+This project is built on top of [memento.nvim](https://github.com/gaborvecsei/memento.nvim) and inspired by [harpoon](https://github.com/ThePrimeagen/harpoon). 
 
-When a buffer is deleted (e.g.: `:q`, `:bd`) `recall.nvim` stores the filepath, and current line number so
-you can check your history and easily go back to a file. The history is persistent across sessions.
+![Recall](https://tbsnhkewuwyfxowgazvr.supabase.co/storage/v1/object/public/public/recall2)
 
-> Imagine, you are editing 3 files and in the heat of development you close `nvim` to open it up
-> in another directory (happened with me to many times).
-> Still, you'd like to use those files, so you'd need to open them up one-by-one knowing the path of the file.
-> With this plugin you just hit the right keys (or call `:lua require("recall").toggle()`)
-> and you can check your history and open them up again easily from a popup menu.
+When you navigate around your project, your navigation history is saved and can be accessed via the recall menu. When the menu is open, you can also navigate by entering the number associated with the file. 
 
 *(The plugin is mostly for my personal use, but PRs are welcome)*
 
 # Install
 
 ```lua
-Plug 'nvim-lua/plenary.nvim' -- if you already have this you don't need to include it again
-Plug 'gaborvecsei/recall.nvim'
+use 'nvim-lua/plenary.nvim' -- if you already have this you don't need to include it again
+use 'AlexXi19/recall.nvim'
 ```
 
 # Usage
@@ -32,12 +27,16 @@ Plug 'gaborvecsei/recall.nvim'
 :lua require("recall").clear_history()
 ```
 
-When the popup is visible, you can **close it with `q`** and **open up any file at any line by hitting `<CR>`**
+When the popup is visible, you can **close it with `q`, `Escape`, or `Ctrl-c`** and **open up any file at any line by hitting `Enter`**
 
 ## Keybinding
 
 ```lua
-nnoremap <leader>mh <cmd>lua require('recall').toggle()<CR>
+nnoremap <C-e> <cmd>lua require('recall').toggle()<CR>
+```
+
+```lua 
+vim.keymap.set("n", "<C-e>", "<cmd>lua require('recall').toggle()<CR>")
 ```
 
 # Configuration
@@ -45,13 +44,11 @@ nnoremap <leader>mh <cmd>lua require('recall').toggle()<CR>
 | Variable                | Description                                                                                                | Type   | Default |
 |-------------------------|------------------------------------------------------------------------------------------------------------|--------|---------|
 | `recall_history`       | Length of the history                                                                                      | `int`  | `20`    |
-| `recall_shorten_path`  | Compact representation of the filepath. (e.g.: `/t/i/a/t/script.py` instead of `/this/is/a/test/script.py` | `bool` | `true`  |
 | `recall_window_width`  | Popup window's width                                                                                       | `int`  | `80`    |
 | `recall_window_height` | Popup window's height                                                                                      | `int`  | `14`    |
 
 ```lua
 vim.g.recall_history = 20
-vim.g.recall_shorten_path = true
 vim.g.recall_window_width = 80
 vim.g.recall_window_height = 14
 ```
