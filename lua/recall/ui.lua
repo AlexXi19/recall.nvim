@@ -73,7 +73,7 @@ local function set_popup_contents(contents)
 end
 
 -- Create a new popup window, and fill buffer with contents
-function M.create_popup(history_data, width, height, shorten_path)
+function M.create_popup(history_data, width, height)
     local popup_info = create_window(width, height)
     PopupWindow = popup_info.win_id
     PopupBuffer = popup_info.bufnr

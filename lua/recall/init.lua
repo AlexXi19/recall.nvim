@@ -50,8 +50,7 @@ function M.toggle()
         return
     end
 
-    local popup_info = Ui.create_popup(HistoryData, vim.g.recall_window_width, vim.g.recall_window_height,
-        vim.g.recall_shorten_path)
+    local popup_info = Ui.create_popup(HistoryData, vim.g.recall_window_width, vim.g.recall_window_height)
 
     -- vim.cmd(string.format(
     -- "autocmd BufLeave <buffer=%d> lua require('recall').toggle()",
@@ -158,7 +157,6 @@ function M.setup(opts)
     end
 
     set_default("history", 20)
-    set_default("shorten_path", true)
     set_default("window_width", 70)
     set_default("window_height", 14)
 end
