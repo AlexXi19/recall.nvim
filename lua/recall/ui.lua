@@ -41,7 +41,7 @@ end
 local function create_content(history_data)
     local contents = {}
 
-    for i, x in ipairs(List.reverse(history_data).data) do
+    for i, x in ipairs(List.reverse(history_data)) do
         local nav = i - 1
         local nav_string = tostring(nav)
 
