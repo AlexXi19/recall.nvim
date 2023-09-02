@@ -67,8 +67,7 @@ function M.reverse(obj)
     for i=#obj.data,1,-1 do
         table.insert(reversed, obj.data[i])
     end
-    obj.data = reversed
-    return obj
+    return reversed
 end
 
 return M
