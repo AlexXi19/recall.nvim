@@ -23,7 +23,7 @@ local M = {}
 -- @param data: list of items
 function M.new(max_nb_items)
     max_nb_items = max_nb_items or 10
-    return {max_nb_items = max_nb_items, data = {}}
+    return { max_nb_items = max_nb_items, data = {} }
 end
 
 -- Add a new item to the list with respect to the maximum list size
@@ -38,11 +38,11 @@ function M.add(obj, item, fn)
 
     if #obj.data >= obj.max_nb_items then
         -- Remove the first (oldest) item
-        table.remove(obj.data, 1)
+        table.remove(obj.data, #obj.data)
     end
 
     -- Add new item to the end of the list
-    table.insert(obj.data, #obj.data+1, item)
+    table.insert(obj.data, 1, item)
 end
 
 function M.to_json(obj)
@@ -50,24 +50,24 @@ function M.to_json(obj)
 end
 
 function M.from_json(obj, json)
-   local data = vim.fn.json_decode(json)
-   -- If there are more lines in the file then what is defined as max, remove 'unnecessary' lines
-   if #data > obj.max_nb_items then
-       for _=1,#data-obj.max_nb_items do
-           table.remove(data, 1)
-       end
-   end
+    local data = vim.fn.json_decode(json)
+    -- If there are more lines in the file then what is defined as max, remove 'unnecessary' lines
+    if #data > obj.max_nb_items then
+        for _ = 1, #data - obj.max_nb_items do
+            table.remove(data, 1)
+        end
+    end
 
-   obj.data = data
-   return obj
+    obj.data = data
+    return obj
 end
 
 function M.reverse(obj)
     local reversed = {}
-    for i=#obj.data,1,-1 do
+    for i = #obj.data, 1, -1 do
         table.insert(reversed, obj.data[i])
     end
-    return reversed
+    obj.data = reversed
 end
 
 return M
